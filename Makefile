@@ -1,7 +1,7 @@
 .DELETE_ON_ERROR:
 .PHONY: all clean qemu
 
-all: build
+all: build/out/installer.iso
 
 .iid: Dockerfile $(wildcard profile/**)
 	[ -s .iid ] && docker rmi --force $(shell cat .iid) || true
