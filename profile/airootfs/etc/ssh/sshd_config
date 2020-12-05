@@ -1,0 +1,9 @@
+AuthorizedKeysFile /etc/authorized_keys
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+PrintMotd no
+Subsystem sftp /usr/lib/ssh/sftp-server
+UsePAM yes
+
+# TODO: Remove when project name is set
+PermitRootLogin prohibit-password

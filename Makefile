@@ -3,7 +3,7 @@
 
 all: build/out/installer.iso
 
-.iid: Dockerfile $(wildcard profile/**)
+.iid: Dockerfile $(shell find profile -type f)
 	[ -s .iid ] && docker rmi --force $(shell cat .iid) || true
 	rm -f .iid
 	docker build profile -f Dockerfile --iidfile .iid
@@ -27,7 +27,7 @@ clean:
 	\rm -fr .iid .cid build/
 
 qemu: build/out/installer.iso
-	sudo qemu-system-x86_64 \
+	qemu-system-x86_64 \
 		-m 1024 \
 		-name installer,process=deploy_installer \
 		-device virtio-scsi-pci,id=scsi0 \
@@ -35,8 +35,9 @@ qemu: build/out/installer.iso
 		-drive "id=cdrom0,if=none,format=raw,media=cdrom,readonly=on,file=build/out/installer.iso" \
 		-kernel build/work/iso/arch/boot/x86_64/vmlinuz-linux \
 		-initrd build/work/iso/arch/boot/x86_64/initramfs-linux.img \
-		-append "console=ttyS0 archisobasedir=arch archisolabel=INSTALLER" \
-		-device virtio-net-pci,romfile=,netdev=net0 -netdev user,id=net0 \
+		-append "console=ttyS0 archisobasedir=arch archisolabel=INSTALLER svc=http://10.0.2.2:7708/" \
+		-device virtio-net-pci,romfile=,netdev=net0 \
+		-netdev user,hostfwd=tcp::5555-:22,id=net0 \
 		-machine type=q35,smm=on,accel=kvm,usb=on \
 		-serial mon:stdio \
 		-no-reboot \

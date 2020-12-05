@@ -1,0 +1,14 @@
+[Unit]
+Description=Installer startup
+
+[Service]
+Type=oneshot
+ExecStart=/etc/rc.installer
+TimeoutSec=0
+StandardOutput=journal+console
+StandardError=journal+console
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target

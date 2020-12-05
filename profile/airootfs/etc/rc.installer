@@ -1,0 +1,4 @@
+#!/bin/bash
+dhcpcd -w
+
+python3 /installer.py

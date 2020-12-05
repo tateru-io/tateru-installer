@@ -8,3 +8,9 @@ syslinux
 intel-ucode
 amd-ucode
 docker
+dhcpcd
+openssh
+vim
+nano
+python
+python-requests
