@@ -29,6 +29,7 @@ clean:
 qemu: build/out/installer.iso
 	qemu-system-x86_64 \
 		-m 1024 \
+		-uuid 00000000-0000-0000-0000-000000000001 \
 		-name installer,process=deploy_installer \
 		-device virtio-scsi-pci,id=scsi0 \
 		-device "scsi-cd,bus=scsi0.0,drive=cdrom0" \
