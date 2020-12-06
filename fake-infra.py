@@ -30,8 +30,24 @@ class ServiceServer(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(key)
 
+    def do_POST(self):
+        global ssh_pub_key
+        if self.path.endswith('installer-callback'):
+            if not ssh_pub_key:
+                self.send_response(204)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write('{}'.encode())
+            else:
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                res = {'ssh_pub_key': ssh_pub_key}
+                self.wfile.write(json.dumps(res).encode())
+
 class ManagerServer(BaseHTTPRequestHandler):
     def do_POST(self):
+        global ssh_pub_key
         if self.path.endswith('boot-installer'):
             print(' > Boot installation request')
             length = int(self.headers['content-length'])

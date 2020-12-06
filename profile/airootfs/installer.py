@@ -4,6 +4,9 @@
 # Just get the SSH key for now
 
 import requests
+import sys
+import time
+import urllib.parse
 
 with open('/proc/cmdline', 'r') as f:
     cmdline = f.read()
@@ -15,7 +18,30 @@ for part in parts:
 else:
     raise Exception('Error NO-SVC: No svc= parameter was provided on kernel command line')
 
-r = requests.get(svc)
+with open('/sys/devices/virtual/dmi/id/product_uuid', 'r') as f:
+    product_uuid = f.read().strip()
+with open('/sys/devices/virtual/dmi/id/product_serial', 'r') as f:
+    product_serial = f.read().strip()
+data = {
+        'uuid': product_uuid,
+        'serial': product_serial,
+    }
+
+print('Machine data:', data)
+
+ssh_pub_key = ''
+while True:
+    # TODO: backoff
+    try:
+        r = requests.post(urllib.parse.urljoin(svc, '/v1/installer-callback'), json=data)
+        if r.status_code == 200:
+            ssh_pub_key = r.json()['ssh_pub_key']
+            break
+        print(f'Tateru machine service returnd code {r.status_code}, will retry')
+    except:
+        print('Unexpected Tateru service call error:', sys.exc_info()[0])
+    time.sleep(5)
+
 with open('/etc/authorized_keys', 'w') as f:
-    f.write(r.text)
+    f.write(ssh_pub_key)
 print('SSH public key installed')
