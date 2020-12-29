@@ -34,12 +34,15 @@ while True:
     # TODO: backoff
     try:
         r = requests.post(urllib.parse.urljoin(svc, '/v1/installer-callback'), json=data)
-        if r.status_code == 200:
+        if r.status_code == 204:
+            print('No installation request found for me, waiting a bit...')
+        elif r.status_code == 200:
             ssh_pub_key = r.json()['ssh_pub_key']
             break
         print(f'Tateru machine service returnd code {r.status_code}, will retry')
-    except:
-        print('Unexpected Tateru service call error:', sys.exc_info()[0])
+    except Exception as err:
+        print('Unexpected Tateru service call error:')
+        traceback.print_tb(err.__traceback__)
     time.sleep(5)
 
 with open('/etc/authorized_keys', 'w') as f:
