@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 
-# TODO: Placeholder for real API
-
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import sys
 import threading
-
-with open(sys.argv[1], 'rb') as f:
-    key = f.read()
 
 ssh_pub_key = ''
 
@@ -24,11 +19,6 @@ class ServiceServer(BaseHTTPRequestHandler):
                 'managedBy': 'http://localhost:7707/',
             }
             self.wfile.write(json.dumps(res).encode())
-        else:
-            self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(key)
 
     def do_POST(self):
         global ssh_pub_key
@@ -68,4 +58,5 @@ if __name__ == '__main__':
     h = HTTPServer(('127.0.0.1', 7708), ServiceServer)
     threading.Thread(target=h.serve_forever, daemon=True).start()
     m = HTTPServer(('127.0.0.1', 7707), ManagerServer)
+    print('Tateru Development Service started')
     m.serve_forever()
