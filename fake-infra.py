@@ -2,7 +2,6 @@
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-import sys
 import threading
 
 ssh_pub_key = ''
