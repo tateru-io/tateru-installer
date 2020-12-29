@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3 -u
 
 # TODO: Placeholder for real API
 # Just get the SSH key for now
@@ -40,7 +40,8 @@ while True:
         elif r.status_code == 200:
             ssh_pub_key = r.json()['ssh_pub_key']
             break
-        print(f'Tateru machine service returnd code {r.status_code}, will retry')
+        else:
+            print(f'Tateru machine service returnd code {r.status_code}, will retry')
     except Exception as err:
         print('Unexpected Tateru service call error:')
         traceback.print_tb(err.__traceback__)
