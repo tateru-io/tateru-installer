@@ -6,6 +6,7 @@
 import requests
 import sys
 import time
+import traceback
 import urllib.parse
 
 with open('/proc/cmdline', 'r') as f:
