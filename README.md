@@ -7,6 +7,8 @@ You can try the image using `make qemu`.
 ## Testing
 
 ```
+# Create ssh-key
+$ ssh-keygen -t ed25519
 # Start the fake deplyoment infra and register your pubkey
 # If you do not have one, you have to generate one first
 $ python3 fake-infra.py
