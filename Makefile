@@ -30,7 +30,6 @@ qemu: build/out/installer.iso
 	qemu-system-x86_64 \
 		-m 1024 \
 		-uuid 00000000-0000-0000-0000-000000000001 \
-		-name installer,process=deploy_installer \
 		-device virtio-scsi-pci,id=scsi0 \
 		-device "scsi-cd,bus=scsi0.0,drive=cdrom0" \
 		-drive "id=cdrom0,if=none,format=raw,media=cdrom,readonly=on,file=build/out/installer.iso" \
@@ -39,7 +38,7 @@ qemu: build/out/installer.iso
 		-append "cow_spacesize=768M console=ttyS0 archisobasedir=arch archisolabel=INSTALLER svc=http://10.0.2.2:7708/" \
 		-device virtio-net-pci,romfile=,netdev=net0 \
 		-netdev user,hostfwd=tcp::5555-:22,id=net0 \
-		-machine type=q35,smm=on,accel=kvm,usb=on \
+		-machine type=q35,smm=on,usb=on \
 		-serial mon:stdio \
 		-no-reboot \
 		-nographic
