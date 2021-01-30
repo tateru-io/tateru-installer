@@ -1,9 +1,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 base
+curl
 linux
 mkinitcpio
 mkinitcpio-archiso
+mkinitcpio-nfs-utils
 syslinux
 intel-ucode
 amd-ucode

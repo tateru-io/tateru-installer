@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="installer"
-iso_label="INSTALLER"
-iso_publisher="Internet Randoms"
-iso_application="Deployment Installer"
+iso_name="tateru-boot"
+iso_label="TATERU"
+iso_publisher="Tateru Crew"
+iso_application="Tateru Installer"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito' 'uefi-x64.systemd-boot.esp' 'uefi-x64.systemd-boot.eltorito')

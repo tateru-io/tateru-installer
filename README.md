@@ -1,6 +1,6 @@
 # Installer
 
-Build installer iso using `make build/out/installer.iso`.
+Build installer iso using `make build/out/tateru-boot.iso`.
 
 You can try the image using `make qemu`.
 

@@ -1,7 +1,7 @@
 .DELETE_ON_ERROR:
 .PHONY: all clean qemu
 
-all: build/out/installer.iso
+all: build/out/tateru-boot.iso
 
 .iid: Dockerfile $(shell find profile -type f)
 	[ -s .iid ] && docker rmi --force $(shell cat .iid) || true
@@ -20,22 +20,22 @@ build/.dummy: .cid
 	docker export $(shell cat .cid) | tar -xf - -C build out/ work/iso/arch/boot
 	touch $@
 
-build/out/installer.iso: build/.dummy
-	cp build/out/installer-*.iso $@
+build/out/tateru-boot.iso: build/.dummy
+	cp build/out/tateru-boot-*.iso $@
 
 clean:
 	\rm -fr .iid .cid build/
 
-qemu: build/out/installer.iso
+qemu: build/out/tateru-boot.iso
 	qemu-system-x86_64 \
 		-m 1024 \
 		-uuid 00000000-0000-0000-0000-000000000001 \
 		-device virtio-scsi-pci,id=scsi0 \
 		-device "scsi-cd,bus=scsi0.0,drive=cdrom0" \
-		-drive "id=cdrom0,if=none,format=raw,media=cdrom,readonly=on,file=build/out/installer.iso" \
+		-drive "id=cdrom0,if=none,format=raw,media=cdrom,readonly=on,file=build/out/tateru-boot.iso" \
 		-kernel build/work/iso/arch/boot/x86_64/vmlinuz-linux \
 		-initrd build/work/iso/arch/boot/x86_64/initramfs-linux.img \
-		-append "cow_spacesize=768M console=ttyS0 archisobasedir=arch archisolabel=INSTALLER svc=http://10.0.2.2:7708/" \
+		-append "cow_spacesize=768M console=ttyS0 archisobasedir=arch archisolabel=TATERU svc=http://10.0.2.2:7708/" \
 		-device virtio-net-pci,romfile=,netdev=net0 \
 		-netdev user,hostfwd=tcp::5555-:22,id=net0 \
 		-machine type=q35,smm=on,usb=on \
