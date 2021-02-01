@@ -1,6 +1,15 @@
 .DELETE_ON_ERROR:
 .PHONY: all clean qemu
 
+ifeq ($(shell uname),Linux)
+ACCEL ?= "kvm"
+else ifeq ($(shell uname),Darwin)
+ACCEL ?= "hvf"
+else
+ACCEL ?= "tcg"
+endif
+
+
 all: build/out/tateru-boot.iso
 
 .iid: Dockerfile $(shell find profile -type f)
@@ -28,7 +37,7 @@ clean:
 
 qemu: build/out/tateru-boot.iso
 	qemu-system-x86_64 \
-		-m 1024 \
+		-m 2048 \
 		-uuid 00000000-0000-0000-0000-000000000001 \
 		-device virtio-scsi-pci,id=scsi0 \
 		-device "scsi-cd,bus=scsi0.0,drive=cdrom0" \
@@ -38,6 +47,7 @@ qemu: build/out/tateru-boot.iso
 		-append "cow_spacesize=768M console=ttyS0 archisobasedir=arch archisolabel=TATERU svc=http://10.0.2.2:7708/" \
 		-device virtio-net-pci,romfile=,netdev=net0 \
 		-netdev user,hostfwd=tcp::5555-:22,id=net0 \
+		-accel "$(ACCEL)" \
 		-machine type=q35,smm=on,usb=on \
 		-serial mon:stdio \
 		-no-reboot \
