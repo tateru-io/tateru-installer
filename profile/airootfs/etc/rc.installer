@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# Re-claim memory from an extra rootfs copy if we booted over PXE
+if [[ -d /run/archiso/httpspace ]]; then
+  umount /run/archiso/httpspace
+fi
+
 dhcpcd -w
 
 python3 -u /installer.py
