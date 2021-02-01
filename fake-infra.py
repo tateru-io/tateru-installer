@@ -12,11 +12,11 @@ class ServiceServer(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
-            res = {
+            res = [{
                 'uuid': '00000000-0000-0000-0000-000000000001',
                 'name': 'qemu',
                 'managedBy': 'http://localhost:7707/',
-            }
+            }]
             self.wfile.write(json.dumps(res).encode())
 
     def do_POST(self):
