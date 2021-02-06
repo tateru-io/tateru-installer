@@ -13,7 +13,7 @@ endif
 all: build/out/tateru-boot.iso
 
 .iid: Dockerfile $(shell find profile -type f)
-	[ -s .iid ] && docker rmi --force $(shell cat .iid) || true
+	[ -s .iid ] && docker rmi --no-prune --force $(shell cat .iid) || true
 	rm -f .iid
 	docker build profile -f Dockerfile --iidfile .iid
 
