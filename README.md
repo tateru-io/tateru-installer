@@ -1,6 +1,9 @@
 # Installer
 
-Build installer iso using `make build/out/tateru-boot.iso`.
+You need to have Docker and `bsdtar` installed to build the installer.
+To run the virtual environment you also need `python3` and `qemu`.
+
+Build installer ISO using `make build/out/tateru-boot.iso`.
 
 You can try the image using `make qemu`.
 

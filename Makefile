@@ -31,9 +31,9 @@ build/.dummy: .cid
 
 build/out/tateru-boot.iso: build/.dummy
 	cp build/out/tateru-boot-*.iso $@
-	# Check the filesize to ensure the copytoram FS can fit it
-	@[ $(shell stat -c '%s' build/work/iso/arch/boot/x86_64/initramfs-linux.img) -gt "40000000" ] && \
-		echo '****************\nWARNING! The size of the initramfs has exceeded 400M, please adjust the ipxe.cfg.j2 template accordingly\n****************' \
+	@# Check the filesize to ensure the copytoram FS can fit it
+	@[ $(shell bsdtar tvf build/out/tateru-boot-*.iso arch/x86_64/airootfs.sfs | awk '{print $$5}') -gt "400000000" ] && \
+		echo '****************\nWARNING! The size of the airootfs has exceeded 400M, please adjust the ipxe.cfg.j2 template accordingly\n****************' \
 		|| true
 
 clean:
