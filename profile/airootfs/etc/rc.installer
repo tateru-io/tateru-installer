@@ -5,6 +5,21 @@ if [[ -d /run/archiso/httpspace ]]; then
   umount /run/archiso/httpspace
 fi
 
+if plymouth --ping; then
+  # Use the system upgrade mode for installation progress
+  plymouth change-mode --system-upgrade
+  plymouth system-update --progress=5
+  plymouth display-message --text="Waiting for DHCP response ..."
+fi
+
 dhcpcd -w
 
+if plymouth --ping; then
+  plymouth system-update --progress=10
+  plymouth display-message --text="Network setup complete, installer starting ..."
+fi
 python3 -u /installer.py
+
+if plymouth --ping; then
+  plymouth quit
+fi
