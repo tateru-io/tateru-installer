@@ -15,6 +15,10 @@ class ServiceServer(BaseHTTPRequestHandler):
             res = [{
                 'uuid': '00000000-0000-0000-0000-000000000001',
                 'name': 'qemu',
+                'installerAddress': '::1',
+                'sshPorts': {
+                    'installer': '5555',
+                },
                 'managedBy': 'http://localhost:7707/',
             }]
             self.wfile.write(json.dumps(res).encode())

@@ -24,7 +24,6 @@ with open('/sys/devices/virtual/dmi/id/product_uuid', 'r') as f:
 with open('/sys/devices/virtual/dmi/id/product_serial', 'r') as f:
     product_serial = f.read().strip()
 data = {
-        'uuid': product_uuid,
         'serial': product_serial,
     }
 
@@ -34,7 +33,7 @@ ssh_pub_key = ''
 while True:
     # TODO: backoff
     try:
-        r = requests.post(urllib.parse.urljoin(svc, '/v1/installer-callback'), json=data)
+        r = requests.post(urllib.parse.urljoin(svc, '/v1/machines/', product_uuid, '/installer-callback'), json=data)
         if r.status_code == 204:
             print('No installation request found for me, waiting a bit...')
         elif r.status_code == 200:
