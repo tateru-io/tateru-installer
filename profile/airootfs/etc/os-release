@@ -1,0 +1,10 @@
+NAME="Tateru Installer"
+PRETTY_NAME="Tateru Installer"
+ID=arch
+BUILD_ID=rolling
+ANSI_COLOR="38;2;0;204;255"
+HOME_URL="https://tateru.io/"
+DOCUMENTATION_URL="https://tateru.io/"
+SUPPORT_URL="https://tateru.io/"
+BUG_REPORT_URL="https://tateru.io/"
+LOGO=tateru
