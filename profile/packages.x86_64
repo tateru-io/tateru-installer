@@ -12,7 +12,20 @@ amd-ucode
 docker
 dhcpcd
 openssh
+efibootmgr
+dosfstools
+
+#
+# Nice to have
+#
 vim
 nano
+man
+# Needed for the 'resize' command
+xterm
+
+#
+# Needed for Tateru installer script and Ansible
+#
 python
 python-requests

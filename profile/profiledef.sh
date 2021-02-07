@@ -13,4 +13,5 @@ pacman_conf="pacman.conf"
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/etc/rc.installer"]="0:0:755"
+  ["/etc/profile.d/terminalsize.sh"]="0:0:755"
 )
