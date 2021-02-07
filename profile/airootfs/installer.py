@@ -33,7 +33,7 @@ ssh_pub_key = ''
 while True:
     # TODO: backoff
     try:
-        r = requests.post(urllib.parse.urljoin(svc, '/v1/machines/', product_uuid, '/installer-callback'), json=data)
+        r = requests.post(urllib.parse.urljoin(svc, f'/v1/machines/{product_uuid}/installer-callback'), json=data)
         if r.status_code == 204:
             print('No installation request found for me, waiting a bit...')
         elif r.status_code == 200:

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse
 import json
 import threading
 
@@ -8,20 +9,31 @@ ssh_pub_key = ''
 
 class ServiceServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path.startswith('/v1/machines'):
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            res = [{
+        mach = {
                 'uuid': '00000000-0000-0000-0000-000000000001',
                 'name': 'qemu',
-                'installerAddress': '::1',
+                'installerAddress': 'localhost',
                 'sshPorts': {
                     'installer': '5555',
                 },
                 'managedBy': 'http://localhost:7707/',
-            }]
+            }
+        p = urlparse(self.path)
+        if p.path.endswith('/v1/machines'):
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            res = [mach]
             self.wfile.write(json.dumps(res).encode())
+        elif p.path.startswith('/v1/machines/00000000-0000-0000-0000-000000000001'):
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(mach).encode())
+        else:
+            self.send_response(404)
+            self.end_headers()
+            self.wfile.write(b'404 not found')
 
     def do_POST(self):
         global ssh_pub_key
