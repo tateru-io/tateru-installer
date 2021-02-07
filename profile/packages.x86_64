@@ -20,4 +20,3 @@ python-requests
 # Pre-built custom packages
 plymouth
 ttf-dejavu
-xf86-video-fbdev
