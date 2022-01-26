@@ -1,4 +1,4 @@
-FROM archlinux:base-20201220.0.11678
+FROM archlinux:base-20220123.0.45312
 
 RUN pacman -Syu --noconfirm
 RUN pacman -S --noconfirm --needed archiso git base-devel sudo
@@ -11,4 +11,3 @@ RUN mkdir /customrepo
 # RUN repo-add /customrepo/customrepo.db.tar.gz /customrepo/*.pkg.tar.*
 
 ADD . /profile
-
