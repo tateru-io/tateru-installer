@@ -3,10 +3,13 @@
 
 ifeq ($(shell uname),Linux)
 ACCEL ?= "kvm"
+SMM ?= on
 else ifeq ($(shell uname),Darwin)
 ACCEL ?= "hvf"
+SMM ?= off
 else
 ACCEL ?= "tcg"
+SMM ?= on
 endif
 
 
@@ -42,6 +45,7 @@ clean:
 qemu: build/out/tateru-boot.iso
 	qemu-system-x86_64 \
 		-m 2048 \
+		-cpu host \
 		-uuid 00000000-0000-0000-0000-000000000001 \
 		-device virtio-scsi-pci,id=scsi0 \
 		-device "scsi-cd,bus=scsi0.0,drive=cdrom0" \
@@ -52,7 +56,7 @@ qemu: build/out/tateru-boot.iso
 		-device virtio-net-pci,romfile=,netdev=net0 \
 		-netdev user,hostfwd=tcp::5555-:22,id=net0 \
 		-accel "$(ACCEL)" \
-		-machine type=q35,smm=on,usb=on \
+		-machine "type=q35,smm=$(SMM),usb=on" \
 		-serial mon:stdio \
 		-no-reboot \
 		-nographic
