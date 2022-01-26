@@ -1,5 +1,5 @@
 .DELETE_ON_ERROR:
-.PHONY: all clean qemu
+.PHONY: all clean qemu netboot iso
 
 ifeq ($(shell uname),Linux)
 ACCEL ?= "kvm"
@@ -13,7 +13,9 @@ SMM ?= on
 endif
 
 
-all: build/out/tateru-boot.iso
+all: netboot
+
+iso: build/out/tateru-boot.iso
 
 .iid: Dockerfile $(shell find profile -type f)
 	[ -s .iid ] && docker rmi --no-prune --force $(shell cat .iid) || true
@@ -38,6 +40,19 @@ build/out/tateru-boot.iso: build/.dummy
 	@[ $(shell bsdtar tvf build/out/tateru-boot-*.iso arch/x86_64/airootfs.sfs | awk '{print $$5}') -gt "400000000" ] && \
 		echo '****************\nWARNING! The size of the airootfs has exceeded 400M, please adjust the ipxe.cfg.j2 template accordingly\n****************' \
 		|| true
+
+netboot: iso
+	mkdir -p build/work/netboot/installer build/out
+	bsdtar -x -C build/work/netboot/installer -f build/out/tateru-boot.iso \
+		arch/x86_64/airootfs.sfs \
+		arch/x86_64/airootfs.sha512 \
+		arch/boot/x86_64/initramfs-linux.img \
+		arch/boot/x86_64/vmlinuz-linux
+	tar --create \
+		--gzip \
+		--file build/out/tateru-netboot.tar.gz \
+		--directory build/work/netboot \
+		installer
 
 clean:
 	\rm -fr .iid .cid build/
